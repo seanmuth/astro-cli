@@ -821,7 +821,7 @@ func airflowUpgradeTest(cmd *cobra.Command, astroV1Client astrov1.APIClient) err
 		fmt.Printf("failed to add 'upgrade-test*' to .gitignore: %s", err.Error())
 	}
 
-	resolvedBuildSecrets := util.ResolveBuildSecrets(buildSecrets, config.CFG.DevBuildSecrets.GetString())
+	resolvedBuildSecrets := util.ResolveBuildSecrets(buildSecrets, config.CFG.DevBuildSecrets.GetString(), os.Getenv("BUILD_SECRET_INPUT"))
 
 	err = containerHandler.UpgradeTest(runtimeVersion, deploymentID, customImageName, resolvedBuildSecrets, versionTest, dagTest, lintTest, lintDeprecations, lintFix, lintConfigFile, astroV1Client)
 	if err != nil {
@@ -856,7 +856,7 @@ func airflowStart(cmd *cobra.Command, args []string, astroV1Client astrov1.APICl
 		return err
 	}
 
-	resolvedBuildSecrets := util.ResolveBuildSecrets(buildSecrets, config.CFG.DevBuildSecrets.GetString())
+	resolvedBuildSecrets := util.ResolveBuildSecrets(buildSecrets, config.CFG.DevBuildSecrets.GetString(), os.Getenv("BUILD_SECRET_INPUT"))
 
 	return containerHandler.Start(&airflow.StartOptions{
 		ImageName:    customImageName,
@@ -1062,7 +1062,7 @@ func airflowRestart(cmd *cobra.Command, args []string, astroV1Client astrov1.API
 		}
 	}
 
-	resolvedBuildSecrets := util.ResolveBuildSecrets(buildSecrets, config.CFG.DevBuildSecrets.GetString())
+	resolvedBuildSecrets := util.ResolveBuildSecrets(buildSecrets, config.CFG.DevBuildSecrets.GetString(), os.Getenv("BUILD_SECRET_INPUT"))
 
 	return containerHandler.Start(&airflow.StartOptions{
 		ImageName:    customImageName,
@@ -1116,7 +1116,7 @@ func airflowPytest(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	resolvedBuildSecrets := util.ResolveBuildSecrets(buildSecrets, config.CFG.DevBuildSecrets.GetString())
+	resolvedBuildSecrets := util.ResolveBuildSecrets(buildSecrets, config.CFG.DevBuildSecrets.GetString(), os.Getenv("BUILD_SECRET_INPUT"))
 
 	exitCode, err := containerHandler.Pytest(pytestFile, customImageName, "", pytestArgs, resolvedBuildSecrets)
 	if err != nil {
@@ -1145,7 +1145,7 @@ func airflowParse(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	resolvedBuildSecrets := util.ResolveBuildSecrets(buildSecrets, config.CFG.DevBuildSecrets.GetString())
+	resolvedBuildSecrets := util.ResolveBuildSecrets(buildSecrets, config.CFG.DevBuildSecrets.GetString(), os.Getenv("BUILD_SECRET_INPUT"))
 
 	return containerHandler.Parse(customImageName, "", resolvedBuildSecrets)
 }
@@ -1166,7 +1166,7 @@ func airflowBuild(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	resolvedBuildSecrets := util.ResolveBuildSecrets(buildSecrets, config.CFG.DevBuildSecrets.GetString())
+	resolvedBuildSecrets := util.ResolveBuildSecrets(buildSecrets, config.CFG.DevBuildSecrets.GetString(), os.Getenv("BUILD_SECRET_INPUT"))
 
 	return containerHandler.Build(customImageName, resolvedBuildSecrets, noCache)
 }

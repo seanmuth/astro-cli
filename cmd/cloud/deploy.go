@@ -224,7 +224,7 @@ func deploy(cmd *cobra.Command, args []string) error {
 		WaitTime:       waitTime,
 		DagsPath:       dagsPath,
 		Description:    deployDescription,
-		BuildSecrets:   util.ResolveBuildSecrets(buildSecrets),
+		BuildSecrets:   util.ResolveBuildSecrets(buildSecrets, os.Getenv("BUILD_SECRET_INPUT")),
 		Force:          forceDeploy,
 		DagBundleName:  dagBundleName,
 	}

@@ -1,6 +1,8 @@
 package cloud
 
 import (
+	"os"
+
 	"github.com/spf13/cobra"
 
 	cloud "github.com/astronomer/astro-cli/cloud/deploy"
@@ -82,7 +84,7 @@ func remoteDeploy(cmd *cobra.Command, args []string) error {
 		Path:         config.WorkingPath,
 		ImageName:    remoteImageName,
 		Platform:     remotePlatform,
-		BuildSecrets: util.ResolveBuildSecrets(remoteBuildSecrets),
+		BuildSecrets: util.ResolveBuildSecrets(remoteBuildSecrets, os.Getenv("BUILD_SECRET_INPUT")),
 		DeploymentID: remoteDeploymentID,
 	}
 
