@@ -1083,7 +1083,7 @@ func standaloneExecDefault(dir string, env, args []string, stdin io.Reader, stdo
 	return airflowrt.ExecWithEnv(dir, env, args, stdin, stdout, stderr)
 }
 
-func (s *Standalone) Build(_, _ string, _ bool) error {
+func (s *Standalone) Build(_ string, _ []string, _ bool) error {
 	return errors.New("astro dev build builds a Docker image and is not available in standalone mode")
 }
 
@@ -1192,7 +1192,7 @@ func (s *Standalone) ComposeExport(_, _ string) error {
 }
 
 // Pytest runs pytest on DAGs using the local venv.
-func (s *Standalone) Pytest(pytestFile, _, _, pytestArgsString, _ string) (string, error) {
+func (s *Standalone) Pytest(pytestFile, _, _, pytestArgsString string, _ []string) (string, error) {
 	if err := s.ensureVenv(); err != nil {
 		return "", err
 	}
@@ -1222,7 +1222,7 @@ func (s *Standalone) Pytest(pytestFile, _, _, pytestArgsString, _ string) (strin
 }
 
 // Parse validates DAGs by running the default integrity test.
-func (s *Standalone) Parse(_, _, _ string) error {
+func (s *Standalone) Parse(_, _ string, _ []string) error {
 	path := filepath.Join(s.airflowHome, DefaultTestPath)
 
 	fileExist, err := fileutil.Exists(path, nil)
@@ -1236,7 +1236,7 @@ func (s *Standalone) Parse(_, _, _ string) error {
 
 	fmt.Println("Checking your DAGs for errors…")
 
-	exitCode, err := s.Pytest(DefaultTestPath, "", "", "", "")
+	exitCode, err := s.Pytest(DefaultTestPath, "", "", "", nil)
 	if err != nil {
 		if strings.Contains(exitCode, "1") {
 			return errors.New("See above for errors detected in your DAGs")
@@ -1247,7 +1247,7 @@ func (s *Standalone) Parse(_, _, _ string) error {
 	return nil
 }
 
-func (s *Standalone) UpgradeTest(_, _, _, _ string, _, _, _, _, _ bool, _ string, _ astrov1.ClientWithResponsesInterface) error {
+func (s *Standalone) UpgradeTest(_, _, _ string, _ []string, _, _, _, _, _ bool, _ string, _ astrov1.ClientWithResponsesInterface) error {
 	return errors.New("astro dev upgrade-test is not available in standalone mode")
 }
 
